@@ -1,7 +1,7 @@
 # Network Security Toolkit
 
 Small collection of Python tools for basic network analysis and security auditing.  
-Educational use only – for networks you own or have explicit permission to test. Everything else ist illegal.
+Educational use only – for networks you own or have explicit permission to test. Everything else is illegal.
 
 ---
 
