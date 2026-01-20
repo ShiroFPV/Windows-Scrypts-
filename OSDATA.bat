@@ -1,3 +1,8 @@
+REM Use at own Risk on Windows 10 this WILL BRICK YOUR SYSTEM you will have to Reinstall Windows after Restarting.
+REM (Exept if you delete the file in the Win32/config folder) 
+REM On Windows 11 this will not work due to Windows deleting the File by itself on Restart!
+
+
 @echo off
 setlocal
 
@@ -26,3 +31,4 @@ echo %FilePath%
 
 endlocal
 pause
+
